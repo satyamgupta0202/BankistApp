@@ -79,8 +79,15 @@ const displayMovements = function (movements) {
 
 displayMovements(account1.movements);
 
+const calcDisplayLabelAmount = function (movements) {
+  const netTotal = movements.reduce((acc, curr) => acc + curr, 0);
+  labelBalance.textContent = `${netTotal} EURO`;
+};
+
+calcDisplayLabelAmount(account1.movements);
+
 /////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////
+//////////////////create username//////////////////////////////////////
 
 const createUsername = function (accnt) {
   accnt.forEach(function (ak) {
@@ -93,8 +100,33 @@ const createUsername = function (accnt) {
 };
 
 createUsername(accounts);
-console.log(accounts);
 
+////////////////////////////////////////////////////////////
+//////////////Lecturesss////////////////////////////////////
+///////////////////////////////////////////////////////////
+
+// const movement = [10, 20, 30, 5885];
+
+// const netBalance = movement.reduce((acc, curr) => (acc += curr), 0);
+// console.log(netBalance);
+
+// const maxValue = movement.reduce(
+//   (acc, curr) => (acc > curr ? acc : curr),
+//   movement[0]
+// );
+
+// console.log(maxValue);
+// const movements = [10, 20, -10, -90, 239, 2932, -19];
+
+// const deposits = movements.filter(function (mov) {
+//   return mov > 0;
+// });
+
+// const withdrew = movements.filter(function (i) {
+//   return i < 0;
+// });
+// console.log(deposits);
+// console.log(withdrew);
 // const k = [100, -230, 399 + 1, -5, 900];
 // const r = 2;
 // // const newk = k.map(function (mov, i, arr) {
