@@ -72,9 +72,37 @@ const displayMovements = function (movements) {
     <div class="movements__value">${mov} 000€</div>
     </div>
     `;
-
+    //After Begin Will arrange in the form of the stsack
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
 
 displayMovements(account1.movements);
+
+/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+
+const createUsername = function (accnt) {
+  accnt.forEach(function (ak) {
+    ak.username = ak.owner
+      .toLowerCase()
+      .split(' ')
+      .map(name => name[0])
+      .join('');
+  });
+};
+
+createUsername(accounts);
+console.log(accounts);
+
+// const k = [100, -230, 399 + 1, -5, 900];
+// const r = 2;
+// // const newk = k.map(function (mov, i, arr) {
+// //   //k.map ek naya map bhi banadega jaha new values stored hongi
+// //   return mov * r;
+// // });
+// const newk = k.map(
+//   (mov, i, arr) =>
+//     `Movement ${i + 1}  ${mov > 0 ? 'Deposited' : 'Withdrawn'} ${Math.abs(mov)}`
+// );
+// console.log(newk);
