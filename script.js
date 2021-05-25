@@ -59,7 +59,7 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 /////////////////////////////////////////////////
-/////////////////////////////////////////////////
+////////////////////Transcations/////////////////////////////
 
 const displayMovements = function (movements) {
   containerMovements.innerHTML = '';
@@ -79,13 +79,42 @@ const displayMovements = function (movements) {
 
 displayMovements(account1.movements);
 
+/////////////////////////////////////////////////////////////////////////
+//////////////////////////Final Summary ///////////////////
+
 const calcDisplayLabelAmount = function (movements) {
   const netTotal = movements.reduce((acc, curr) => acc + curr, 0);
-  labelBalance.textContent = `${netTotal} EURO`;
+  labelBalance.textContent = `${netTotal} 💲`;
 };
 
 calcDisplayLabelAmount(account1.movements);
 
+//////////////////////////////////////////////////////////////////
+//////////////////////////////Added,Subtracted,Interest Gain/////////
+
+const calDisplaySummary = function (movement) {
+  const netDeposit = movement
+    .filter(curr => curr > 0)
+    .reduce((acc, curr) => acc + curr, 0);
+  labelSumIn.textContent = `${netDeposit} 💲`;
+
+  const netWithdraw = movement
+    .filter(curr => curr < 0)
+    .reduce((acc, curr) => acc + curr, 0);
+  labelSumOut.textContent = `${Math.abs(netWithdraw)} 💲`;
+
+  const interestGain = movement
+    .filter(mov => mov > 0)
+    .map((curr, i) => curr * (1.2 / 100))
+    .filter((curr, i, arr) => {
+      console.log(arr);
+      return curr > 1;
+    })
+    .reduce((acc, curr) => acc + curr);
+
+  labelSumInterest.textContent = `${interestGain} 💲`;
+};
+calDisplaySummary(account1.movements);
 /////////////////////////////////////////////////////////
 //////////////////create username//////////////////////////////////////
 
@@ -138,3 +167,14 @@ createUsername(accounts);
 //     `Movement ${i + 1}  ${mov > 0 ? 'Deposited' : 'Withdrawn'} ${Math.abs(mov)}`
 // );
 // console.log(newk);
+
+// const movements = [10, 20, -30, 40, -494, 484];
+// const interest = 2;
+// const newArray = movements
+//   .filter(mov => mov > 0)
+//   .map((curr, i, arr) => {
+//     console.log(arr);
+//     return curr * interest;
+//   })
+//   .reduce((acc, curr) => acc + curr, 0);
+// console.log(newArray);
