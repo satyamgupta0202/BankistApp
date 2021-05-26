@@ -62,7 +62,7 @@ const inputClosePin = document.querySelector('.form__input--pin');
 ////////////////////Transcations////////////////
 
 const displayMovements = function (movements) {
-  containerMovements.innerHTML = '';
+  containerMovements.innerHTML = ' ';
   movements.forEach(function (mov, i, arr) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
@@ -77,7 +77,7 @@ const displayMovements = function (movements) {
   });
 };
 
-displayMovements(account1.movements);
+// displayMovements(account1.movements);
 
 ////////////////////////////////////////////////////////////////
 /////////////////Final Summary ////////////////////////////////
@@ -87,34 +87,34 @@ const calcDisplayLabelAmount = function (movements) {
   labelBalance.textContent = `${netTotal} 💲`;
 };
 
-calcDisplayLabelAmount(account1.movements);
+// calcDisplayLabelAmount(account1.movements);
 
 //////////////////////////////////////////////////////////////////
 //////////////////////////////Added,Subtracted,Interest Gain/////////
 
-const calDisplaySummary = function (movement) {
-  const netDeposit = movement
+const calDisplaySummary = function (accs) {
+  const netDeposit = accs.movements
     .filter(curr => curr > 0)
     .reduce((acc, curr) => acc + curr, 0);
   labelSumIn.textContent = `${netDeposit} 💲`;
 
-  const netWithdraw = movement
+  const netWithdraw = accs.movements
     .filter(curr => curr < 0)
     .reduce((acc, curr) => acc + curr, 0);
   labelSumOut.textContent = `${Math.abs(netWithdraw)} 💲`;
 
-  const interestGain = movement
+  const interestGain = accs.movements
     .filter(mov => mov > 0)
-    .map((curr, i) => curr * (1.2 / 100))
+    .map((curr, i) => curr * (accs.interestRate / 100))
     .filter((curr, i, arr) => {
       console.log(arr);
-      return curr > 1;
+      return curr >= 1;
     })
-    .reduce((acc, curr) => acc + curr);
+    .reduce((acc, curr) => acc + curr, 0);
 
   labelSumInterest.textContent = `${interestGain} 💲`;
 };
-calDisplaySummary(account1.movements);
+// calDisplaySummary(account1.movements);
 /////////////////////////////////////////////////////////
 //////////////////create username//////////////////////////////////////
 
@@ -139,12 +139,19 @@ btnLogin.addEventListener('click', function (e) {
   );
 
   if (currentAccount?.pin === Number(inputLoginPin.value)) {
-    //Details
     //Welcome Notification
+    labelWelcome.textContent = `Welcome ${currentAccount.owner.split(' ')[0]}`;
+    //opacity 100
+    containerApp.style.opacity = 100;
+
+    ///Login Apperance
+    inputLoginUsername.value = ' ';
+    inputLoginPin.value = ' ';
+    inputLoginPin.blur();
     //Summary
-    //Hide the Login Credentials
-    //Opacity 100%
-    //console.log('Pin is correct');
+    calDisplaySummary(currentAccount);
+    calcDisplayLabelAmount(currentAccount.movements);
+    displayMovements(currentAccount.movements);
   }
 });
 
