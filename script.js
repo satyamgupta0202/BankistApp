@@ -30,7 +30,7 @@ const account4 = {
   pin: 4444,
 };
 
-const accounts = [account1, account2, account3, account4];
+let accounts = [account1, account2, account3, account4];
 
 // Elements
 const labelWelcome = document.querySelector('.welcome');
@@ -58,7 +58,6 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-/////////////////////////////////////////////////
 ////////////////////Transcations////////////////
 
 const displayMovements = function (movements) {
@@ -77,19 +76,15 @@ const displayMovements = function (movements) {
   });
 };
 
-// displayMovements(account1.movements);
+/////////////////////update ui//////////////////////////////
 
-////////////////////////////////////////////////////////////////
 /////////////////Final Summary ////////////////////////////////
 
-const calcDisplayLabelAmount = function (movements) {
-  const netTotal = movements.reduce((acc, curr) => acc + curr, 0);
-  labelBalance.textContent = `${netTotal} 💲`;
+const calcDisplayLabelAmount = function (accs) {
+  accs.balance = accs.movements.reduce((acc, curr) => acc + curr, 0);
+  labelBalance.textContent = `${accs.balance} 💲`;
 };
 
-// calcDisplayLabelAmount(account1.movements);
-
-//////////////////////////////////////////////////////////////////
 //////////////////////////////Added,Subtracted,Interest Gain/////////
 
 const calDisplaySummary = function (accs) {
@@ -114,8 +109,7 @@ const calDisplaySummary = function (accs) {
 
   labelSumInterest.textContent = `${interestGain} 💲`;
 };
-// calDisplaySummary(account1.movements);
-/////////////////////////////////////////////////////////
+
 //////////////////create username//////////////////////////////////////
 
 const createUsername = function (accnt) {
@@ -129,6 +123,13 @@ const createUsername = function (accnt) {
 };
 
 createUsername(accounts);
+
+////////
+const updateUi = function (ac) {
+  calDisplaySummary(ac);
+  calcDisplayLabelAmount(ac);
+  displayMovements(ac.movements);
+};
 
 let currentAccount;
 btnLogin.addEventListener('click', function (e) {
@@ -145,65 +146,41 @@ btnLogin.addEventListener('click', function (e) {
     containerApp.style.opacity = 100;
 
     ///Login Apperance
-    inputLoginUsername.value = ' ';
-    inputLoginPin.value = ' ';
+    inputLoginUsername.value = '';
+    inputLoginPin.value = '';
     inputLoginPin.blur();
     //Summary
-    calDisplaySummary(currentAccount);
-    calcDisplayLabelAmount(currentAccount.movements);
-    displayMovements(currentAccount.movements);
+    updateUi(currentAccount);
+    // calDisplaySummary(currentAccount);
+    // calcDisplayLabelAmount(currentAccount);
+    // displayMovements(currentAccount.movements);
   }
 });
 
-////////////////////////////////////////////////////////////
-//////////////Lecturesss////////////////////////////////////
-///////////////////////////////////////////////////////////
+console.log(accounts);
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+  const transferAmount = Number(inputTransferAmount.value);
+  const receiverAccount = accounts.find(
+    acc => acc.username === inputTransferTo.value
+  );
+  if (
+    transferAmount > 0 &&
+    receiverAccount?.username !== currentAccount.username &&
+    receiverAccount &&
+    currentAccount.balance >= transferAmount
+  ) {
+    currentAccount.movements.push(-transferAmount);
+    receiverAccount.movements.push(transferAmount);
 
-// const movement = [10, 20, 30, 5885];
+    updateUi(currentAccount);
 
-// const netBalance = movement.reduce((acc, curr) => (acc += curr), 0);
-// console.log(netBalance);
-
-// const maxValue = movement.reduce(
-//   (acc, curr) => (acc > curr ? acc : curr),
-//   movement[0]
-// );
-
-// console.log(maxValue);
-// const movements = [10, 20, -10, -90, 239, 2932, -19];
-
-// const deposits = movements.filter(function (mov) {
-//   return mov > 0;
-// });
-
-// const withdrew = movements.filter(function (i) {
-//   return i < 0;
-// });
-// console.log(deposits);
-// console.log(withdrew);
-// const k = [100, -230, 399 + 1, -5, 900];
-// const r = 2;
-// // const newk = k.map(function (mov, i, arr) {
-// //   //k.map ek naya map bhi banadega jaha new values stored hongi
-// //   return mov * r;
-// // });
-// const newk = k.map(
-//   (mov, i, arr) =>
-//     `Movement ${i + 1}  ${mov > 0 ? 'Deposited' : 'Withdrawn'} ${Math.abs(mov)}`
-// );
-// console.log(newk);
-
-// const movements = [10, 20, -30, 40, -494, 484];
-// const interest = 2;
-// const newArray = movements
-//   .filter(mov => mov > 0)
-//   .map((curr, i, arr) => {
-//     console.log(arr);
-//     return curr * interest;
-//   })
-//   .reduce((acc, curr) => acc + curr, 0);
-// console.log(newArray);
-//Find
-
-// const user = accounts.find(accounts => accounts.owner === 'Jessica Davis');
-// console.log(user);
+    // calDisplaySummary(currentAccount);
+    // calcDisplayLabelAmount(currentAccount);
+    // displayMovements(currentAccount.movements);
+    console.log('Transfer Valid');
+  }
+  inputTransferAmount.value = inputTransferTo.value = ' ';
+  // console.log(transferAccount);
+  // console.log(transferAmount);
+});
