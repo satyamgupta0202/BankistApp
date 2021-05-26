@@ -59,7 +59,7 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 /////////////////////////////////////////////////
-////////////////////Transcations/////////////////////////////
+////////////////////Transcations////////////////
 
 const displayMovements = function (movements) {
   containerMovements.innerHTML = '';
@@ -79,8 +79,8 @@ const displayMovements = function (movements) {
 
 displayMovements(account1.movements);
 
-/////////////////////////////////////////////////////////////////////////
-//////////////////////////Final Summary ///////////////////
+////////////////////////////////////////////////////////////////
+/////////////////Final Summary ////////////////////////////////
 
 const calcDisplayLabelAmount = function (movements) {
   const netTotal = movements.reduce((acc, curr) => acc + curr, 0);
@@ -130,6 +130,24 @@ const createUsername = function (accnt) {
 
 createUsername(accounts);
 
+let currentAccount;
+btnLogin.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  currentAccount = accounts.find(
+    acc => acc.username === inputLoginUsername.value
+  );
+
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    //Details
+    //Welcome Notification
+    //Summary
+    //Hide the Login Credentials
+    //Opacity 100%
+    //console.log('Pin is correct');
+  }
+});
+
 ////////////////////////////////////////////////////////////
 //////////////Lecturesss////////////////////////////////////
 ///////////////////////////////////////////////////////////
@@ -178,3 +196,7 @@ createUsername(accounts);
 //   })
 //   .reduce((acc, curr) => acc + curr, 0);
 // console.log(newArray);
+//Find
+
+// const user = accounts.find(accounts => accounts.owner === 'Jessica Davis');
+// console.log(user);
