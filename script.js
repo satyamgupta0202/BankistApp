@@ -58,11 +58,14 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-////////////////////Transcations////////////////
+////////////////////Transcations/////****///////////
 
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
   containerMovements.innerHTML = ' ';
-  movements.forEach(function (mov, i, arr) {
+
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  movs.forEach(function (mov, i, arr) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
     const html = `
@@ -124,12 +127,15 @@ const createUsername = function (accnt) {
 
 createUsername(accounts);
 
-////////
+//update the Ui
+
 const updateUi = function (ac) {
   calDisplaySummary(ac);
   calcDisplayLabelAmount(ac);
   displayMovements(ac.movements);
 };
+
+//Login Current User
 
 let currentAccount;
 btnLogin.addEventListener('click', function (e) {
@@ -153,6 +159,8 @@ btnLogin.addEventListener('click', function (e) {
     updateUi(currentAccount);
   }
 });
+
+//Taking Loan
 
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
@@ -207,9 +215,48 @@ btnClose.addEventListener('click', function (e) {
   console.log('Logout');
 });
 
-//////////knowing every method
+let sortedCondition = false;
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sortedCondition);
+  sortedCondition = !sortedCondition;
+});
 
-// const k = [1, , 3, 4, 4, 5];
+/////Sorting Sikhraha
 
-// const y = k.every(mov => mov > 0);
-// console.log(y);
+// const temp = [453, 65, 466, 3, -45, -474, -3372];
+//Ascending
+// temp.sort((a, b) => a - b);
+// console.log(temp);
+
+// temp.sort(function (a, b) {
+//   if (a - b > 0) {
+//     return -1;
+//   }
+//   if (a - b < 0) {
+//     return 1;
+// //   }
+// // });
+// console.log(temp);
+
+//More Wih Array
+
+// const a = Array(5);
+// a.fill(1, 2, 4);
+// console.log(a);
+
+// const k = Array.from({ length: 5 }, () => 2);
+// console.log(k);
+
+// const yy = Array.from({ length: 5 }, (_, i) => i + 1);
+// console.log(yy);
+
+const movementsUi = Array.from(document.querySelectorAll('.movements__value'));
+console.log(movementsUi);
+
+labelBalance.addEventListener('click', function () {
+  const movementsUi = Array.from(
+    document.querySelectorAll('.movements__value')
+  );
+  console.log(movementsUi.map(el => el.textContent.replace('€', '')));
+});
