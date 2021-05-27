@@ -151,13 +151,10 @@ btnLogin.addEventListener('click', function (e) {
     inputLoginPin.blur();
     //Summary
     updateUi(currentAccount);
-    // calDisplaySummary(currentAccount);
-    // calcDisplayLabelAmount(currentAccount);
-    // displayMovements(currentAccount.movements);
   }
 });
 
-console.log(accounts);
+// console.log(accounts);
 btnTransfer.addEventListener('click', function (e) {
   e.preventDefault();
   const transferAmount = Number(inputTransferAmount.value);
@@ -172,15 +169,25 @@ btnTransfer.addEventListener('click', function (e) {
   ) {
     currentAccount.movements.push(-transferAmount);
     receiverAccount.movements.push(transferAmount);
-
     updateUi(currentAccount);
-
-    // calDisplaySummary(currentAccount);
-    // calcDisplayLabelAmount(currentAccount);
-    // displayMovements(currentAccount.movements);
     console.log('Transfer Valid');
   }
   inputTransferAmount.value = inputTransferTo.value = ' ';
-  // console.log(transferAccount);
-  // console.log(transferAmount);
+});
+
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  if (
+    inputCloseUsername.value === currentAccount.username &&
+    currentAccount.pin === Number(inputClosePin.value)
+  ) {
+    const index = accounts.findIndex(
+      account => account.username === currentAccount.username
+    );
+    accounts.splice(index, 1);
+  }
+  inputClosePin.value = inputCloseUsername.value = '';
+  containerApp.style.opacity = 0;
+  console.log('Logout');
 });
