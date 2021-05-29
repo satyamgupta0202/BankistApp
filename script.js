@@ -80,6 +80,22 @@ const inputClosePin = document.querySelector('.form__input--pin');
 
 /////////////////////////////////////////////////
 // Functions
+const modifyDateMovements = function (dates) {
+  const calcdatePassed = (date1, date2) =>
+    Math.round(Math.abs(date1 - date2) / (1000 * 60 * 60 * 24));
+
+  const datePassed = calcdatePassed(new Date(), dates);
+
+  if (datePassed === 0) return 'Today';
+  if (datePassed === 1) return 'Yesterday';
+  if (datePassed <= 7) return `${datePassed} Days ago`;
+  else {
+    const date = `${dates.getDate()}`.padStart(2, 0);
+    const month = `${dates.getMonth() + 1}`.padStart(2, 0);
+    const year = dates.getFullYear();
+    return `${date}/${month}/${year}`;
+  }
+};
 
 const displayMovements = function (acc, sort = false) {
   containerMovements.innerHTML = '';
@@ -91,10 +107,8 @@ const displayMovements = function (acc, sort = false) {
   movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     const now = new Date(acc.movementsDates[i]);
-    const date = `${now.getDate()}`.padStart(2, 0);
-    const month = `${now.getMonth()}`.padStart(2, 0);
-    const year = now.getFullYear();
-    const updateDate = `${date}/${month}/${year}`;
+
+    const updateDate = modifyDateMovements(now);
     const html = `
       <div class="movements__row">
         <div class="movements__type movements__type--${type}">${
@@ -164,9 +178,9 @@ const updateUI = function (acc) {
 // Event handlers
 
 let currentAccount;
-currentAccount = account2;
-updateUI(currentAccount);
-containerApp.style.opacity = 100;
+// currentAccount = account2;
+// updateUI(currentAccount);
+// containerApp.style.opacity = 100;
 
 //////date at the top
 
@@ -187,7 +201,7 @@ btnLogin.addEventListener('click', function (e) {
     containerApp.style.opacity = 100;
     const now = new Date();
     const date = `${now.getDate()}`.padStart(2, 0);
-    const month = `${now.getMonth()}`.padStart(2, 0);
+    const month = `${now.getMonth() + 1}`.padStart(2, 0);
     const year = now.getFullYear();
     const hour = `${now.getHours()}`.padStart(2, 0);
     const min = `${now.getMinutes()}`.padStart(2, 0);
@@ -221,7 +235,7 @@ btnTransfer.addEventListener('click', function (e) {
     currentAccount.movements.push(-amount);
     receiverAcc.movements.push(amount);
     currentAccount.movementsDates.push(new Date().toDateString());
-    receiverAccount.movementsDates.push(new Date().toISOString());
+    receiverAcc.movementsDates.push(new Date().toISOString());
     // Update UI
     updateUI(currentAccount);
   }
