@@ -272,16 +272,20 @@ btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
 
   const amount = Number(inputLoanAmount.value);
+  setTimeout(function () {
+    if (
+      amount > 0 &&
+      currentAccount.movements.some(mov => mov >= amount * 0.1)
+    ) {
+      // Add movement
+      currentAccount.movements.push(amount);
+      currentAccount.movementsDates.push(new Date().toISOString());
 
-  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
-    // Add movement
-    currentAccount.movements.push(amount);
-    currentAccount.movementsDates.push(new Date().toISOString());
-
-    // Update UI
-    updateUI(currentAccount);
-  }
-  inputLoanAmount.value = '';
+      // Update UI
+      updateUI(currentAccount);
+    }
+    inputLoanAmount.value = '';
+  }, 5000);
 });
 
 btnClose.addEventListener('click', function (e) {
@@ -325,3 +329,11 @@ btnSort.addEventListener('click', function (e) {
 // };
 
 // console.log('US', new Intl.NumberFormat('en-US', option).format(num));
+///
+// const i = ['ab', 'c'];
+// const orderPizzza = setTimeout(
+//   (ind1, ind2) => console.log(`${ind1} ${ind2}`),
+//   5000,//dealay
+//   ...i //ingridients
+// );
+// console.log('wow');
