@@ -198,19 +198,24 @@ const updateUI = function (acc) {
   // Display summary
   calcDisplaySummary(acc);
 };
-
-//fake login
-
-///////////////////////////////////////
-// Event handlers
+let timers;
+const setTimer = function () {
+  let time = 30;
+  timers = setInterval(function () {
+    let min = String(Math.trunc(time / 60)).padStart(2, 0);
+    let sec = String(Math.trunc(time % 60)).padStart(2, 0);
+    labelTimer.textContent = `${min}:${sec}`;
+    time--;
+    if (time === 0) {
+      clearInterval(timers);
+      labelWelcome.textContent = 'Login Again!!';
+      containerApp.style.opacity = 0;
+    }
+  }, 1000);
+  return timers;
+};
 
 let currentAccount;
-// currentAccount = account2;
-// updateUI(currentAccount);
-// containerApp.style.opacity = 100;
-
-//////date at the top
-
 btnLogin.addEventListener('click', function (e) {
   // Prevent form from submitting
   e.preventDefault();
@@ -240,6 +245,8 @@ btnLogin.addEventListener('click', function (e) {
     inputLoginPin.blur();
 
     // Update UI
+    if (timers) clearInterval(timers);
+    timers = setTimer();
     updateUI(currentAccount);
   }
 });
@@ -259,6 +266,8 @@ btnTransfer.addEventListener('click', function (e) {
     receiverAcc?.username !== currentAccount.username
   ) {
     // Doing the transfer
+    clearInterval(timers);
+    timers = setTimer();
     currentAccount.movements.push(-amount);
     receiverAcc.movements.push(amount);
     currentAccount.movementsDates.push(new Date().toDateString());
@@ -278,6 +287,8 @@ btnLoan.addEventListener('click', function (e) {
       currentAccount.movements.some(mov => mov >= amount * 0.1)
     ) {
       // Add movement
+      clearInterval(timers);
+      timers = setTimer();
       currentAccount.movements.push(amount);
       currentAccount.movementsDates.push(new Date().toISOString());
 
@@ -317,23 +328,3 @@ btnSort.addEventListener('click', function (e) {
   displayMovements(currentAccount.movements, !sorted);
   sorted = !sorted;
 });
-
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
-
-// const num = 100000;
-// const option = {
-//   style: 'unit',
-//   currency: 'EUR',
-//   unit: 'mile-per-hour',
-// };
-
-// console.log('US', new Intl.NumberFormat('en-US', option).format(num));
-///
-// const i = ['ab', 'c'];
-// const orderPizzza = setTimeout(
-//   (ind1, ind2) => console.log(`${ind1} ${ind2}`),
-//   5000,//dealay
-//   ...i //ingridients
-// );
-// console.log('wow');
